@@ -132,4 +132,4 @@ table and templated fstab/snapraid configs.
 
 ## License
 
-TODO: pick a license (e.g. MIT) since the repo is public.
+Licensed under the MIT License. See [`LICENSE`](LICENSE).
