@@ -1,6 +1,6 @@
 # Homelab
 
-Infrastructure-as-code for my self-hosted homelab: a Plex-centric media stack on
+Overview of my self-hosted homelab: a Plex-centric media stack on
 Debian 13, with a mergerfs union pool and SnapRAID parity, deployed via Docker Compose.
 
 See [`docs/`](docs/) for the Debian install checklist, the migration steps, and the
