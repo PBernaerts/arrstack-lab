@@ -81,7 +81,7 @@ services:
     ports:
       - 8085:8080
     restart: unless-stopped
-  
+
   qbittorrent:
     image: lscr.io/linuxserver/qbittorrent:5.2.1_v2.0.13-ls461
     container_name: qbittorrent
@@ -93,12 +93,12 @@ services:
       - TORRENTING_PORT=58946
     volumes:
       - ${APPDATA}/qbittorrent:/config
-      - ${DATA}:/data 
+      - ${DATA}:/data
     ports:
       - 8080:8080
       - 58946:58946
       - 58946:58946/udp
-    stop_grace_period: "30s" 
+    stop_grace_period: "30s"
     restart: unless-stopped
 
   plex:
@@ -123,11 +123,11 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
-      - KOMETA_CONFIG=/config/config.yml 
-      - KOMETA_TIMES=03:00 
-      - KOMETA_RUN=False 
-      - KOMETA_TESTS=False 
-      - KOMETA_NO_MISSING=False 
+      - KOMETA_CONFIG=/config/config.yml
+      - KOMETA_TIMES=03:00
+      - KOMETA_RUN=False
+      - KOMETA_TESTS=False
+      - KOMETA_NO_MISSING=False
     volumes:
       - ${APPDATA}/kometa:/config
       - /mnt/user/kometa/assets:/assets
@@ -228,7 +228,7 @@ services:
     restart: unless-stopped
 
   tautulli:
-    image: ghcr.io/tautulli/tautulli:v2.17.1 
+    image: ghcr.io/tautulli/tautulli:v2.17.1
     container_name: tautulli
     restart: unless-stopped
     volumes:
@@ -241,13 +241,13 @@ services:
       - 8181:8181
 
   seerr:
-    image: ghcr.io/seerr-team/seerr:v3.3.0 
+    image: ghcr.io/seerr-team/seerr:v3.3.0
     init: true
     container_name: seerr
     environment:
       - LOG_LEVEL=info
       - TZ=${TZ}
-      - PORT=5055 
+      - PORT=5055
     ports:
       - 5055:5055
     volumes:
@@ -269,7 +269,7 @@ services:
       - TZ=${TZ}
     volumes:
       - ${APPDATA}/kavita:/config
-      - ${DATA}:/data 
+      - ${DATA}:/data
     ports:
       - 5000:5000
     restart: unless-stopped
@@ -306,5 +306,5 @@ services:
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
-      - TZ=${TZ} 
+      - TZ=${TZ}
     restart: unless-stopped
