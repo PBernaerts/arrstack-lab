@@ -1,0 +1,310 @@
+services:
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:2.4.0.5397-ls149
+    container_name: prowlarr
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${APPDATA}/prowlarr:/config
+    ports:
+      - 9696:9696
+    restart: unless-stopped
+
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:4.0.17.2952-ls314
+    container_name: sonarr
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${APPDATA}/sonarr:/config
+      - ${DATA}:/data
+    ports:
+      - 8989:8989
+    restart: unless-stopped
+
+  sonarr-anime:
+    image: lscr.io/linuxserver/sonarr:4.0.17.2952-ls314
+    container_name: sonarr-anime
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${APPDATA}/sonarr-anime:/config
+      - ${DATA}:/data
+    ports:
+      - 8991:8989
+    restart: unless-stopped
+
+  radarr:
+    image: lscr.io/linuxserver/radarr:6.2.1.10461-ls305
+    container_name: radarr
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${APPDATA}/radarr:/config
+      - ${DATA}:/data
+    ports:
+      - 7878:7878
+    restart: unless-stopped
+
+  radarr-remux:
+    image: lscr.io/linuxserver/radarr:6.2.1.10461-ls305
+    container_name: radarr-remux
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${APPDATA}/radarr-remux:/config
+      - ${DATA}:/data
+    ports:
+      - 7880:7878
+    restart: unless-stopped
+
+  sabnzbd:
+    image: lscr.io/linuxserver/sabnzbd:5.0.4-ls258
+    container_name: sabnzbd
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${APPDATA}/sabnzbd:/config
+      - ${DATA}:/data
+    ports:
+      - 8085:8080
+    restart: unless-stopped
+  
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:5.2.1_v2.0.13-ls461
+    container_name: qbittorrent
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - WEBUI_PORT=8080
+      - TORRENTING_PORT=58946
+    volumes:
+      - ${APPDATA}/qbittorrent:/config
+      - ${DATA}:/data 
+    ports:
+      - 8080:8080
+      - 58946:58946
+      - 58946:58946/udp
+    stop_grace_period: "30s" 
+    restart: unless-stopped
+
+  plex:
+    image: lscr.io/linuxserver/plex:1.43.2.10687-563d026ea-ls308
+    container_name: plex
+    network_mode: host
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - VERSION=docker
+      - PLEX_CLAIM= #optional
+    volumes:
+      - ${APPDATA}/plex:/config
+      - ${DATA}:/data
+    restart: unless-stopped
+
+  kometa:
+    image: lscr.io/linuxserver/kometa:v2.3.1-ls99
+    container_name: kometa
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - KOMETA_CONFIG=/config/config.yml 
+      - KOMETA_TIMES=03:00 
+      - KOMETA_RUN=False 
+      - KOMETA_TESTS=False 
+      - KOMETA_NO_MISSING=False 
+    volumes:
+      - ${APPDATA}/kometa:/config
+      - /mnt/user/kometa/assets:/assets
+    restart: unless-stopped
+
+#  cloudflared:
+#    image: cloudflare/cloudflared:2026.6.0
+#    command: tunnel --no-autoupdate run
+#    container_name: cloudflared
+#    environment:
+#      - TUNNEL_TOKEN=${CF_TUNNEL_TOKEN}
+#    restart: unless-stopped
+
+
+  caddy:
+    image: caddy:2.11.4-alpine
+    container_name: caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ${APPDATA}/caddy/conf:/etc/caddy
+      - ${APPDATA}/caddy/data:/data
+      - ${APPDATA}/caddy/config:/config
+
+
+  clonarr:
+    image: ghcr.io/prophetse7en/clonarr:v3.2.1
+    container_name: clonarr
+    restart: unless-stopped
+    ports:
+      - "6060:6060"
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${APPDATA}/clonarr:/config
+
+  cross-seed:
+    image: ghcr.io/cross-seed/cross-seed:6.13.7
+    container_name: cross-seed
+    user: "99:100"
+    ports:
+      - "2468:2468"
+    volumes:
+      - ${APPDATA}/cross-seed:/config
+      - ${DATA}:/data
+    command: daemon
+    restart: unless-stopped
+
+  anibridge:
+    image: ghcr.io/anibridge/anibridge:v2.1.4
+    container_name: anibridge
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${APPDATA}/anibridge:/config
+    ports:
+      - 4848:4848
+    restart: unless-stopped
+
+  pal:
+    image: remirigal/plex-auto-languages:v1.2.3
+    container_name: pal
+    environment:
+      - TZ=${TZ}
+    volumes:
+      - ${APPDATA}/pal:/config
+    restart: unless-stopped
+
+  diun:
+    image: ghcr.io/crazy-max/diun:4.33
+    container_name: diun
+    command: serve
+    volumes:
+      - ${APPDATA}/diun:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - TZ=${TZ}
+      - DIUN_WATCH_WORKERS=20
+      - DIUN_WATCH_SCHEDULE=0 */6 * * *
+      - DIUN_WATCH_JITTER=30s
+      - DIUN_PROVIDERS_DOCKER=true
+      - DIUN_NOTIF_DISCORD_WEBHOOKURL=${DISCORD_WEBHOOK}
+    healthcheck:
+      test: ["CMD", "diun", "healthcheck"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
+    labels:
+      - diun.enable=true
+    restart: unless-stopped
+
+  tautulli:
+    image: ghcr.io/tautulli/tautulli:v2.17.1 
+    container_name: tautulli
+    restart: unless-stopped
+    volumes:
+      - ${APPDATA}/tautulli:/config
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    ports:
+      - 8181:8181
+
+  seerr:
+    image: ghcr.io/seerr-team/seerr:v3.3.0 
+    init: true
+    container_name: seerr
+    environment:
+      - LOG_LEVEL=info
+      - TZ=${TZ}
+      - PORT=5055 
+    ports:
+      - 5055:5055
+    volumes:
+      - ${APPDATA}/seerr:/app/config
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider http://localhost:5055/api/v1/settings/public || exit 1
+      start_period: 20s
+      timeout: 3s
+      interval: 15s
+      retries: 3
+    restart: unless-stopped
+
+  kavita:
+    image: lscr.io/linuxserver/kavita:v0.9.0.2-ls111
+    container_name: kavita
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${APPDATA}/kavita:/config
+      - ${DATA}:/data 
+    ports:
+      - 5000:5000
+    restart: unless-stopped
+
+  actual_server:
+    image: docker.io/actualbudget/actual-server:sha-8f2302e-alpine
+    container_name: actual
+    ports:
+      # This line makes Actual available at port 5006 of the device you run the server on,
+      # i.e. http://localhost:5006. You can change the first number to change the port, if you want.
+      - '5006:5006'
+    volumes:
+      # Change './actual-data' below to the path to the folder you want Actual to store its data in on your server.
+      # '/data' is the path Actual will look for its files in by default, so leave that as-is.
+      - ${APPDATA}/actual:/data
+    healthcheck:
+      # Enable health check for the instance
+      test: ['CMD-SHELL', 'node scripts/health-check.js']
+      # health check using self signed certs
+      # test: ['CMD-SHELL', 'NODE_EXTRA_CA_CERTS=/data/selfhost.crt node scripts/health-check.js']
+      interval: 60s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    restart: unless-stopped
+
+  wizarr:
+    container_name: wizarr
+    image: ghcr.io/wizarrrr/wizarr:v2026.4.0
+    ports:
+      - 5690:5690
+    volumes:
+      - ${APPDATA}/wizarr:/data
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ} 
+    restart: unless-stopped
